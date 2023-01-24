@@ -7,6 +7,11 @@ interface Report {
   source: string;
 }
 
+interface UpdateReport {
+  amount?: number;
+  source?: string;
+}
+
 @Injectable()
 export class AppService {
   // It`s a common practice to have this method be called exactly the same as the controller method
@@ -35,14 +40,14 @@ export class AppService {
     return newReport;
   }
 
-  updateReport(type: ReportType, id: string, { amount, source }: Report) {
+  updateReport(type: ReportType, id: string, { amount, source }: UpdateReport) {
     const report = data.report.find(
       (report) => report.type === type && report.id === id,
     );
 
     if (report) {
-      report.amount = amount;
-      report.source = source;
+      if (amount) report.amount = amount;
+      if (source) report.source = source;
       report.updated_at = new Date();
     }
 
