@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 import { data, ReportType } from './data';
+import { ReportResponseDto } from './dtos/report.dto';
 
 interface Report {
   amount: number;
@@ -15,17 +16,29 @@ interface UpdateReport {
 @Injectable()
 export class AppService {
   // It`s a common practice to have this method be called exactly the same as the controller method
-  getAllReports(type: ReportType) {
-    return data.report.filter((report) => report.type === type);
+  getAllReports(type: ReportType): ReportResponseDto[] {
+    return data.report.flatMap((report) => {
+      if (report.type === type) {
+        return new ReportResponseDto(report);
+      }
+      return [];
+    });
   }
 
-  getReportById(type: ReportType, id: string) {
-    return data.report.find(
+  getReportById(type: ReportType, id: string): ReportResponseDto {
+    const report = data.report.find(
       (report) => report.type === type && report.id === id,
     );
+
+    if (!report) return;
+
+    return new ReportResponseDto(report);
   }
 
-  createReport(type: ReportType, { amount, source }: Report) {
+  createReport(
+    type: ReportType,
+    { amount, source }: Report,
+  ): ReportResponseDto {
     const newReport = {
       id: uuid(),
       amount: amount,
@@ -37,10 +50,14 @@ export class AppService {
 
     data.report.push(newReport);
 
-    return newReport;
+    return new ReportResponseDto(newReport);
   }
 
-  updateReport(type: ReportType, id: string, { amount, source }: UpdateReport) {
+  updateReport(
+    type: ReportType,
+    id: string,
+    { amount, source }: UpdateReport,
+  ): ReportResponseDto {
     const report = data.report.find(
       (report) => report.type === type && report.id === id,
     );
@@ -51,7 +68,7 @@ export class AppService {
       report.updated_at = new Date();
     }
 
-    return report;
+    return new ReportResponseDto(report);
   }
 
   deleteReport(type: ReportType, id: string) {
