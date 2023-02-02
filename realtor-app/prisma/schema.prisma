@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+ 
+model User {
+  id                    Int @id @default(autoincrement()) // That param will be generated automaticaly
+  name                  String
+  phone                 String
+  email                 String
+  password              String
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt()
+  user_type             UserType
+  homes                 Home[]
+  realtor_messages      Message[] @relation("realtor_messages") // Related to realter in Message model. Thats because there are an ambiguous relation between User and Model
+  buyer_messages        Message[] @relation("buyer_messages") // Related to realter in Message model. Thats because there are an ambiguous relation between User and Model
+}
+
+model Home {
+  id                    Int @id @default(autoincrement()) // That param will be generated automaticaly
+  address               String
+  number_of_bedrooms    Int
+  number_of_bathrooms   Float
+  city                  String
+  listed_date           DateTime @default(now())
+  price                 Float
+  land_size             Float
+  property_type         PropertyType
+  images                Image[]
+  realtor_id            Int
+  realtor               User @relation(fields: [realtor_id], references: [id])
+  message               Message[]
+}
+
+model Image {
+  id                    Int @id @default(autoincrement()) // That param will be generated automaticaly
+  url                   String
+  home_id               Int
+  home                  Home @relation(fields: [home_id], references: [id])
+}
+
+model Message {
+  id                    Int @id @default(autoincrement()) // That param will be generated automaticaly
+  message               String
+  home_id               Int
+  home                  Home @relation(fields: [home_id], references: [id])
+  realtor_id            Int
+  realtor               User @relation("realtor_messages", fields: [realtor_id], references: [id])
+  buyer_id              Int
+  buyer                 User @relation("buyer_messages", fields: [buyer_id], references: [id])
+}
+
+enum PropertyType {
+  RESIDENTIAL
+  CONDO
+}
+
+enum UserType {
+  BUYER
+  REALTOR
+  ADMIN
+}
