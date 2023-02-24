@@ -14,7 +14,7 @@ model User {
   id                    Int @id @default(autoincrement()) // That param will be generated automaticaly
   name                  String
   phone                 String
-  email                 String
+  email                 String @unique // Mark as unique we will be able to use the findUnique method
   password              String
   created_at            DateTime @default(now())
   updated_at            DateTime @updatedAt()
@@ -64,7 +64,7 @@ enum PropertyType {
 }
 
 enum UserType {
-  BUYER
-  REALTOR
-  ADMIN
+  BUYER // Anybody can sign up as a buyer
+  REALTOR // Not anybody can sign up as a realtor
+  ADMIN 
 }
