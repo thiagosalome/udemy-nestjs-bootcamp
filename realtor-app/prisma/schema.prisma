@@ -34,6 +34,8 @@ model Home {
   price                 Float
   land_size             Float
   property_type         PropertyType
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt()
   images                Image[]
   realtor_id            Int
   realtor               User @relation(fields: [realtor_id], references: [id])
@@ -43,8 +45,10 @@ model Home {
 model Image {
   id                    Int @id @default(autoincrement()) // That param will be generated automaticaly
   url                   String
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt()
   home_id               Int
-  home                  Home @relation(fields: [home_id], references: [id])
+  home                  Home @relation(fields: [home_id], references: [id], onDelete: Cascade)
 }
 
 model Message {

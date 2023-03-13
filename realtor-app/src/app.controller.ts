@@ -7,13 +7,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    const test = {
-      name: 'Ok',
-      asd: 'asdaksdj qwkjdq wd',
-      gfdfasddfgdfg: 'aferger',
-      gfdfasddfgdfgvdfgdfg: 'aferger',
-      gf: 'aferger',
-    };
     return this.appService.getHello();
   }
 }
