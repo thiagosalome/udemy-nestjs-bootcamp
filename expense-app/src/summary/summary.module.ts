@@ -9,7 +9,7 @@ import { SummaryService } from './summary.service';
   controllers: [SummaryController],
   providers: [
     SummaryService,
-    // ReportService, // Put the ReportService allows us to use it in taht module, but its not a good practice
+    // ReportService, // Put the ReportService allows us to use it in that module, but its not a good practice
   ],
 })
 export class SummaryModule {}

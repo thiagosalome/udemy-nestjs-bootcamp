@@ -3,7 +3,7 @@
 import { ExecutionContext, NestInterceptor, CallHandler } from '@nestjs/common';
 import { map } from 'rxjs';
 
-// This interceptor is used to transform the data that is returned from the API
+// This interceptor is used to transform the data that is returned from the API. It works like a middleware
 export class CustomInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler) {
     return next.handle().pipe(
