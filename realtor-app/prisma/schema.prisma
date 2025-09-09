@@ -1,6 +1,15 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+
+// COMMANDS:
+  // - (npx|pnpx|yarn) prisma init: to generate this file
+  // - (npx|pnpx|yarn) prisma db push: to gerenate the modules
+  // - (npx|pnpx|yarn) prisma studio: to open prisma studio
+
+// To generate this file and initialize prisma run '(npx|pnpx|yarn) prisma init'. Remember to configure de DATABASE_URL using Docker
+// Then run '(npx|pnpx|yarn) prisma studio' to visualize the data
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,6 +18,10 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// MODULES:
+  // - To push them into the database is just run '(npx|pnpx|yarn) prisma db push'
+  // - Then is just run '(npx|pnpx|yarn) prisma init'
  
 model User {
   id                    Int @id @default(autoincrement()) // That param will be generated automaticaly
@@ -21,7 +34,7 @@ model User {
   user_type             UserType
   homes                 Home[]
   realtor_messages      Message[] @relation("realtor_messages") // Related to realter in Message model. Thats because there are an ambiguous relation between User and Model
-  buyer_messages        Message[] @relation("buyer_messages") // Related to realter in Message model. Thats because there are an ambiguous relation between User and Model
+  buyer_messages        Message[] @relation("buyer_messages") // Related to buyer in Message model. Thats because there are an ambiguous relation between User and Model
 }
 
 model Home {
@@ -39,7 +52,7 @@ model Home {
   images                Image[]
   realtor_id            Int
   realtor               User @relation(fields: [realtor_id], references: [id])
-  message               Message[]
+  messages              Message[]
 }
 
 model Image {
