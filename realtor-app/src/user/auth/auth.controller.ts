@@ -12,6 +12,7 @@ import * as bcrypt from 'bcryptjs';
 import { GenerateProductKeyDto, SigninDto, SignupDto } from '../dtos/auth.dto';
 import { AuthService } from './auth.service';
 
+// To create this controller is just run 'nest g controller auth user'
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

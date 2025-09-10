@@ -16,6 +16,7 @@ interface SigninParams {
   password: string;
 }
 
+// To create this service is just run 'nest g service auth user'
 @Injectable()
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) {}
