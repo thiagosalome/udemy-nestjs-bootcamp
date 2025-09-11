@@ -21,13 +21,17 @@ interface SigninParams {
 export class AuthService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  // Generate a JWT and return
   private generateJWT(id: number, name: string) {
     return jwt.sign(
+      // Payload
       {
         id,
         name,
       },
+      // Secret Key
       process.env.JSON_TOKEN_KEY,
+      // Options
       {
         expiresIn: 3600,
       },
@@ -38,6 +42,7 @@ export class AuthService {
     { email, password, name, phone }: SignupParams,
     userType: UserType,
   ) {
+    // To use .findUnique is necessary add @unique in email.User in schema.prisma
     const userExists = await this.prismaService.user.findUnique({
       where: {
         email,
@@ -49,6 +54,8 @@ export class AuthService {
       throw new ConflictException('The user already exists');
     }
 
+    // The salt (10) is to add a security layer on the password.
+    // Once that I hash, is not possible decrypt. You need to compare both passwords in the hash way
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await this.prismaService.user.create({
