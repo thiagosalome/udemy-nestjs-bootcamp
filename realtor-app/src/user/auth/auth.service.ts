@@ -84,6 +84,7 @@ export class AuthService {
       throw new HttpException('Invalid credentials', 400);
     }
 
+    // Get the hashedPassword from the database
     const hashedPassword = user.password;
 
     const isValidPassowrd = await bcrypt.compare(password, hashedPassword);
@@ -97,6 +98,7 @@ export class AuthService {
     return { token };
   }
 
+  // This method generate product keys for ADMINS and REALTORS
   async generateProductKey(email: string, userType: UserType) {
     const stringKey = `${email}-${userType}-${process.env.PRODUCT_KEY_SECRET}`;
 

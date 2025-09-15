@@ -17,6 +17,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  // This signup consider 3 types of user (ADMIN, REALTOR, BUYER)
   @Post('/signup/:userType')
   async signup(
     @Body() body: SignupDto,
@@ -44,6 +45,7 @@ export class AuthController {
     return this.authService.signin(body);
   }
 
+  // The product key is necessary for ADMIN and REALTOR cases
   @Post('/key')
   generateProductKey(@Body() { email, userType }: GenerateProductKeyDto) {
     return this.authService.generateProductKey(email, userType);

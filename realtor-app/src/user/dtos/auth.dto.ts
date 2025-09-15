@@ -9,6 +9,7 @@ import {
   MinLength,
 } from 'class-validator';
 
+// Those validations in DTO only works because of whitelist in ValidationPipe in main.ts file
 export class SignupDto {
   @IsString()
   @IsNotEmpty()
