@@ -8,6 +8,7 @@ import {
 } from 'class-validator';
 import { ReportType } from 'src/data';
 
+// Those validations in DTO only works because of whitelist in ValidationPipe in main.ts file
 export class CreateReportDto {
   @IsNumber()
   @IsPositive()
