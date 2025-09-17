@@ -5,12 +5,14 @@ import {
   Param,
   ParseEnumPipe,
   Post,
+  Get,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserType } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
 import { GenerateProductKeyDto, SigninDto, SignupDto } from '../dtos/auth.dto';
 import { AuthService } from './auth.service';
+import { User, UserInfo } from '../decorators/user.decorator';
 
 // To create this controller is just run 'nest g controller auth user'
 @Controller('auth')
@@ -49,5 +51,11 @@ export class AuthController {
   @Post('/key')
   generateProductKey(@Body() { email, userType }: GenerateProductKeyDto) {
     return this.authService.generateProductKey(email, userType);
+  }
+
+  @Get('/me')
+  me(@User() user: UserInfo) {
+    // console.log('user', user);
+    return user;
   }
 }
