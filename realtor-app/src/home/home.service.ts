@@ -189,4 +189,30 @@ export class HomeService {
       },
     });
   }
+
+  async getRealtorByHomeId(id: number) {
+    const home = await this.prismaService.home.findUnique({
+      where: {
+        id,
+      },
+      // With this select I define what I want to get from home table. In this case I only want to realtor params
+      select: {
+        // Select to return not only the realtor id, but other properties
+        realtor: {
+          select: {
+            name: true,
+            id: true,
+            email: true,
+            phone: true,
+          },
+        },
+      },
+    });
+
+    if (!home) {
+      throw new NotFoundException();
+    }
+
+    return home.realtor;
+  }
 }
