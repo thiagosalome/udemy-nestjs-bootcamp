@@ -10,7 +10,7 @@ export class UserInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     const token = request?.headers?.authorization?.split('Bearer ')[1];
     const user = await jwt.decode(token);
-    request.user = user;
+    request.user = user; // Pass user to request
     return handler.handle();
   }
 }

@@ -13,6 +13,7 @@ import { UserInterceptor } from './user/interceptors/user.interceptor';
   providers: [
     AppService,
     // This interceptor was created to grab the JWT, decode it and pass to the @User decorator
+    // It was used here because we want to use in every single endpoint out there
     {
       provide: APP_INTERCEPTOR,
       useClass: UserInterceptor,
