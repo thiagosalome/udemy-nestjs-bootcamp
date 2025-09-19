@@ -51,9 +51,8 @@ export class HomeController {
     return this.homeService.getHomeById(id);
   }
 
-  // Use the custom AuthGuard
-  @Roles(UserType.ADMIN, UserType.REALTOR)
-  @UseGuards(AuthGuard)
+  @Roles(UserType.ADMIN, UserType.REALTOR) // Define the roles that can access this endpoint
+  @UseGuards(AuthGuard) // Use the custom AuthGuard to handle with authorization part
   @Post()
   createHome(@Body() body: CreateHomeDto, @User() user: UserInfo) {
     // return this.homeService.createHome(body, user.id);
