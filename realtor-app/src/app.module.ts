@@ -4,8 +4,9 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { HomeModule } from './home/home.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { UserInterceptor } from './user/interceptors/user.interceptor';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [UserModule, PrismaModule, HomeModule],
@@ -17,6 +18,11 @@ import { UserInterceptor } from './user/interceptors/user.interceptor';
     {
       provide: APP_INTERCEPTOR,
       useClass: UserInterceptor,
+    },
+    {
+      provide: APP_GUARD,
+      // We are going to use AuthGuard in every single request, because even if an endpoint doesn't have a Role decorator, the AuthGuard do a by pass on these cases
+      useClass: AuthGuard,
     },
   ],
 })
