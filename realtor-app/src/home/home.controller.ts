@@ -96,14 +96,28 @@ export class HomeController {
 
   // Buyer send a message to the realtor
   @Roles(UserType.BUYER)
-  @Post('/inquire/:id') // The id refers to the house we want to inquire
+  @Post('/:id/inquire') // The id refers to the house we want to inquire
   inquire(
-    @Param('id', ParseIntPipe) homeId: number,
+    @Param('id', ParseIntPipe) homeId: number, // Home id
     @User() user: UserInfo,
     @Body() { message }: InquireDto,
   ) {
     return this.homeService.inquire(user, homeId, message);
   }
 
-  // Realtor gets all messages
+  // Realtor gets all messages from a particular home
+  @Roles(UserType.REALTOR)
+  @Get('/:id/messages')
+  async getHomeMessages(
+    @Param('id', ParseIntPipe) id: number, // Home id
+    @User() user: UserInfo,
+  ) {
+    const realtor = await this.homeService.getRealtorByHomeId(id);
+
+    if (realtor.id !== user.id) {
+      throw new UnauthorizedException();
+    }
+
+    return this.homeService.getMessagesByHome(id);
+  }
 }
