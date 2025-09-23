@@ -9,13 +9,16 @@ import {
   Put,
   Query,
   UnauthorizedException,
-  UseGuards,
 } from '@nestjs/common';
 import { PropertyType, UserType } from '@prisma/client';
-import { CreateHomeDto, HomeResponseDto, UpdateHomeDto } from './dtos/home.dto';
+import {
+  CreateHomeDto,
+  HomeResponseDto,
+  InquireDto,
+  UpdateHomeDto,
+} from './dtos/home.dto';
 import { HomeService } from './home.service';
 import { User, UserInfo } from 'src/user/decorators/user.decorator';
-import { AuthGuard } from 'src/guards/auth.guard';
 import { Roles } from 'src/decorators/role.decorator';
 
 @Controller('home')
@@ -90,4 +93,17 @@ export class HomeController {
 
     return this.homeService.deleteHomeById(id);
   }
+
+  // Buyer send a message to the realtor
+  @Roles(UserType.BUYER)
+  @Post('/inquire/:id') // The id refers to the house we want to inquire
+  inquire(
+    @Param('id', ParseIntPipe) homeId: number,
+    @User() user: UserInfo,
+    @Body() { message }: InquireDto,
+  ) {
+    return this.homeService.inquire(user, homeId, message);
+  }
+
+  // Realtor gets all messages
 }

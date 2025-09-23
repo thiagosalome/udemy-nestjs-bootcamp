@@ -25,7 +25,7 @@ export class AuthGuard implements CanActivate {
     ]); // Getting the roles defined in role.decorator.ts
 
     // We only will verify the JWT if there are roles in the array
-    if (roles.length) {
+    if (roles?.length) {
       // 2 - Grab the JWT from the request header and verify it
       const request = context.switchToHttp().getRequest();
       const token = request?.headers?.authorization?.split('Bearer ')[1];
