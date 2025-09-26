@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { homeSelect, HomeService } from './home.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { PropertyType } from '@prisma/client';
+import { NotFoundException } from '@nestjs/common';
 
 // Nestjs uses Jest for test
 const mockGetHomes = [
@@ -51,16 +52,16 @@ describe('HomeService', () => {
   });
 
   describe('getHome', () => {
-    it('should call prisma home.findMany with correct params', async () => {
-      const filters = {
-        city: 'Toronto',
-        price: {
-          gte: 1000000,
-          lte: 1500000,
-        },
-        propertyType: PropertyType.RESIDENTIAL,
-      };
+    const filters = {
+      city: 'Toronto',
+      price: {
+        gte: 1000000,
+        lte: 1500000,
+      },
+      propertyType: PropertyType.RESIDENTIAL,
+    };
 
+    it('should call prisma home.findMany with correct params', async () => {
       // Creating a mock function using jest and defining the return
       const mockPrismaFindManyHomes = jest.fn().mockReturnValue(mockGetHomes);
 
@@ -85,6 +86,21 @@ describe('HomeService', () => {
           ...filters,
         },
       });
+    });
+
+    it('should thrown not found exception if not homes are found', async () => {
+      // Creating a mock function using jest and defining the return
+      const mockPrismaFindManyHomes = jest.fn().mockReturnValue([]);
+
+      // When we use spyOn it means that instead of using prismaService.home.findMany in home.service.ts we are gonna use mockPrismaFindManyHomes
+      jest
+        .spyOn(prismaService.home, 'findMany')
+        .mockImplementation(mockPrismaFindManyHomes);
+
+      // Expect getHomes returns a error
+      await expect(service.getHomes(filters)).rejects.toThrowError(
+        NotFoundException,
+      );
     });
   });
 });
