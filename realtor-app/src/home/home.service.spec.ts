@@ -49,7 +49,7 @@ const mockImages = [
   },
 ];
 
-const mockCreateHomeParams = describe('HomeService', () => {
+describe('HomeService', () => {
   let service: HomeService;
   let prismaService: PrismaService;
 

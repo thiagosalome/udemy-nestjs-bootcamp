@@ -27,10 +27,10 @@ export class HomeController {
 
   @Get()
   getHomes(
-    @Query('city') city: string,
-    @Query('minPrice') minPrice: string,
-    @Query('maxPrice') maxPrice: string,
-    @Query('propertyType') propertyType: PropertyType,
+    @Query('city') city?: string,
+    @Query('minPrice') minPrice?: string,
+    @Query('maxPrice') maxPrice?: string,
+    @Query('propertyType') propertyType?: PropertyType,
   ): Promise<HomeResponseDto[]> {
     const price =
       minPrice || maxPrice
