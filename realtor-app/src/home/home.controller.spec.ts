@@ -97,8 +97,25 @@ describe('HomeController', () => {
 
     it('should throw unauth error if realtor did not creat home', async () => {
       await expect(
+        // updateHome(home_id, body home, user info
         controller.updateHome(5, mockUpdateHomeParams, mockUserInfo),
       ).rejects.toThrowError(UnauthorizedException);
+    });
+
+    it('should update home if realtor id is valid', async () => {
+      // Mocking updateHomeById method from home service
+      const mockUpdateHomeById = jest.fn().mockReturnValue(mockHome);
+      jest
+        .spyOn(homeService, 'updateHomeById')
+        .mockImplementation(mockUpdateHomeById);
+
+      // updateHome(home_id, body home, user info)
+      await controller.updateHome(5, mockUpdateHomeParams, {
+        ...mockUserInfo,
+        id: 53, // We need to pass this id because the mock of getRealtorByHomeId returns an user with id 53
+      });
+
+      expect(mockUpdateHomeById).toBeCalled();
     });
   });
 });
